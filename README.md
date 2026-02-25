@@ -5,7 +5,7 @@ lazarus菜单栏在 Windows/macOS/GTK/Qt 下使用操作系统原生菜单，在
 只需要有MainMenu的单元添加红代码部分就可以实现自定义背景、字体，高亮颜色及字体大小及菜单栏位置(Align支持alTop / alBottom)等。  
 下图是在Ubuntu截图的：
 <img width="457" height="180" alt="image" src="https://github.com/user-attachments/assets/3916d59c-84f1-4df8-8524-e6ad1ebb483a" />
-
+  
 ```
 unit menu_unit;
 
