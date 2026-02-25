@@ -66,6 +66,7 @@ type
   { TStyledMenuBar }
   TStyledMenuBar = class(TCustomControl)
   private
+    FIconSize:Integer;
     FMainMenu: TMainMenu;
     FHotIndex: Integer;
     FPressedIndex: Integer;
@@ -116,6 +117,7 @@ type
     property Font;
     property AutoSize;
 
+    property IconSize: Integer read FIconSize write FIconSize default 24;
     property BarColor: TColor read FBarColor write FBarColor default clBtnFace;
     property ItemHoverColor: TColor read FItemHoverColor write FItemHoverColor default clHighlight;
     property TextColor: TColor read FTextColor write FTextColor default clBtnText;
@@ -237,6 +239,7 @@ var
   Item: TMenuItem;
   ShortCutText: String;
   MaxImgWidth, MaxImgHeight: Integer;
+  IconSize:Integer;
 begin
   FMaxTextWidth := 0;
   FMaxShortcutWidth := 0;
@@ -252,11 +255,16 @@ begin
 
   MaxImgWidth := 0;
   MaxImgHeight := 0;
+  if FMenuBar <> nil then
+    IconSize := FMenuBar.IconSize
+  else
+    IconSize := 24;
 
   if (FImages <> nil) and (FImages.Count > 0) then
   begin
-    MaxImgWidth := Min(FImages.Width, 24);
-    MaxImgHeight := Min(FImages.Height, 24);
+
+    MaxImgWidth := Min(FImages.Width, IconSize);
+    MaxImgHeight := Min(FImages.Height, IconSize);
   end;
 
   for i := 0 to FMenuItems.Count - 1 do
@@ -264,13 +272,13 @@ begin
     Item := FMenuItems[i];
     if (Item.Bitmap <> nil) and (not Item.Bitmap.Empty) then
     begin
-      MaxImgWidth := Max(MaxImgWidth, Min(Item.Bitmap.Width, 24));
-      MaxImgHeight := Max(MaxImgHeight, Min(Item.Bitmap.Height, 24));
+      MaxImgWidth := Max(MaxImgWidth, Min(Item.Bitmap.Width, IconSize));
+      MaxImgHeight := Max(MaxImgHeight, Min(Item.Bitmap.Height, IconSize));
     end;
   end;
 
   if MaxImgWidth > 0 then
-    FTextIndent := 4 + 24 + 6
+    FTextIndent := 4 + IconSize + 6
   else
     FTextIndent := 10;
 
@@ -287,7 +295,7 @@ begin
     end;
   end;
 
-  FItemHeight := Max(24, Canvas.TextHeight('Wg')) + 6;
+  FItemHeight := Max(IconSize, Canvas.TextHeight('Wg')) + 6;
 end;
 
 procedure TStyledMenuPopup.SetMenuItems(AValue: TMenuItem);
@@ -336,6 +344,7 @@ var
   Bmp: TBitmap;
   DrawEffect: TGraphicsDrawEffect;
   HasSubMenu: Boolean;
+  IconSize: Integer;
 begin
   Item := FMenuItems[Index];
   HasSubMenu := (Item.Count > 0);
@@ -373,11 +382,16 @@ begin
   IconWidth := 0;
   IconHeight := 0;
   IconIdx := Item.ImageIndex;
+  if FMenuBar <> nil then
+    IconSize := FMenuBar.IconSize
+  else
+    IconSize := 24;
 
   if (FImages <> nil) and (IconIdx >= 0) and (IconIdx < FImages.Count) then
   begin
-    IconWidth := Min(FImages.Width, 24);
-    IconHeight := Min(FImages.Height, 24);
+
+    IconWidth := Min(FImages.Width, IconSize);
+    IconHeight := Min(FImages.Height, IconSize);
     IconX := ARect.Left + 4;
     IconY := ARect.Top + (ARect.Height - IconHeight) div 2;
 
@@ -401,8 +415,8 @@ begin
   end
   else if (Item.Bitmap <> nil) and (not Item.Bitmap.Empty) then
   begin
-    IconWidth := Min(Item.Bitmap.Width, 24);
-    IconHeight := Min(Item.Bitmap.Height, 24);
+    IconWidth := Min(Item.Bitmap.Width, IconSize);
+    IconHeight := Min(Item.Bitmap.Height, IconSize);
     IconX := ARect.Left + 4;
     IconY := ARect.Top + (ARect.Height - IconHeight) div 2;
     Item.Bitmap.Transparent := True;
@@ -730,6 +744,7 @@ begin
   FTextColor := clBtnText;
   FTextHoverColor := clHighlightText;
   FPopupColor := clWhite;
+  FIconSize:=24;
   FPopupBorderColor := clGray;
   FDisabledTextColor := clGray;
 end;
