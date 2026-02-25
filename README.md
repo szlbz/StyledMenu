@@ -4,7 +4,9 @@ lazarus菜单栏在 Windows/macOS/GTK/Qt 下使用操作系统原生菜单，在
 并充分利用原有的MainItem进行菜单设置，用一个单元文件 StyledMenuUnit.pas，你可以将其放到窗体上，绑定原有的 TMainMenu，即可实现自定义背景色和项目样式。  
 只需要有MainMenu的单元添加红代码部分就可以实现自定义背景、字体，高亮颜色及字体大小及菜单栏位置(Align支持alTop / alBottom)等。  
 下图是在Ubuntu截图的：  
-<img width="457" height="180" alt="image" src="https://github.com/user-attachments/assets/3916d59c-84f1-4df8-8524-e6ad1ebb483a" />
+<img width="457" height="180" alt="image" src="https://github.com/user-attachments/assets/3916d59c-84f1-4df8-8524-e6ad1ebb483a" />  
+<img width="371" height="242" alt="image" src="https://github.com/user-attachments/assets/6e7ab77c-2b39-474d-ac5b-0d2c63220ac9" />  
+<img width="776" height="434" alt="image" src="https://github.com/user-attachments/assets/4e7e3852-f91f-4cbc-a674-6d5fd6d56fc2" />  
   
 ```
 unit menu_unit;
