@@ -37,7 +37,6 @@ type
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     procedure FormCreate(Sender: TObject);
-    procedure MenuItem5Click(Sender: TObject);
   private
     FStyleBar:TStyledMenuBar;
   public
@@ -52,105 +51,6 @@ implementation
 {$R *.lfm}
 
 { TForm1 }
-
-function abnorm_menu(var ni:integer; var Sigma : double):Boolean;
-//接近零不合格过程控制
-var
-  Form            : TForm;
-  SigmaOpts       : Tradiogroup;
-  optionx         : TGroupBox;
-  DialogUnits     : TPoint;
-  i,ButtonTop, ButtonWidth, ButtonHeight: Integer;
-  Pedit           : TSpinEdit;
-  pt,pt0          : TLabel;
-begin
-  Sigma := 0.05;
-  ni:=10000;
-  result:=false;
-  Form := TForm.Create(Application);
-  with Form do
-    try
-      Form.Color:=$00F8E7DF;
-      Canvas.Font := Font;
-      BorderStyle := bsDialog;
-      Caption := '接近零不合格过程控制参数设置   ';
-      ClientWidth := 255;
-      ClientHeight :=138;
-      Position := poScreenCenter;
-      SigmaOpts := TRadiogroup.Create(Form);
-      with SigmaOpts do
-        begin
-          Parent := Form;
-          Left := 10;
-          Top :=  10;
-          Columns:=3;
-          height:=40;
-          width:= 235;
-          Caption:= '显著水平:    ';
-          items.add('0.05   ');
-          items.add('0.01   ');
-          items.add('0.005  ');
-          itemindex:=0;
-        end;
-      pt := TLabel.Create(Form);
-      with pt do
-        begin
-          Parent := form;
-          Left := 10;
-          Top := 60;
-          caption:= '不合格品期望率(1/N), N=    ';
-        end;
-     pedit := TSpinEdit.Create(Form);
-     with pedit do
-       begin
-         Parent := form;
-         Left := 155;
-         Top := 60;
-         height:=15;
-         width:=88;
-         value:=10000;
-         minvalue:=100;
-         maxvalue:=100000000;
-         Increment:=10000;
-        end;
-      ButtonTop := 100;
-      ButtonWidth := 108;
-      ButtonHeight := 28;
-      with TButton.Create(Form) do
-        begin
-          Parent := Form;
-          Caption := '确定';
-          ModalResult := mrOk;
-          Default := True;
-          SetBounds(105, ButtonTop, ButtonWidth,ButtonHeight);
-        end;
-      if ShowModal = mrOk then
-        begin
-          ni:=pEdit.value;
-          case SigmaOpts.ItemIndex of
-             0:Sigma := 0.05;
-             1:Sigma := 0.01;
-             2:Sigma := 0.005;
-          end;
-          result:=true;
-        end;
-    finally
-      Form.Free;
-    end;
-end;
-
-
-
-procedure TForm1.MenuItem5Click(Sender: TObject);
-var
-  ni : Integer;
-  si : Double;
-begin
-  if abnorm_menu(ni,si) then  ShowMessage(IntToStr(ni)+'   '+FloatToStr(si));
-  Memo1.Lines.Clear;
-  Memo1.Lines.Add(IntToStr(ni));
-  Memo1.Lines.Add(floatToStr(si));
-end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
