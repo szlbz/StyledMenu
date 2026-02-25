@@ -306,7 +306,8 @@ begin
 
   CalculateLayout;
 
-  TotalWidth := FTextIndent + FMaxTextWidth + 20 + FMaxShortcutWidth + 20;
+  // 修改宽度计算：增加右侧预留空间 (+30 改为 +40)，确保箭头不被截断
+  TotalWidth := FTextIndent + FMaxTextWidth + 20 + FMaxShortcutWidth + 40;
   if TotalWidth < 150 then TotalWidth := 150;
 
   TotalHeight := 4;
@@ -417,17 +418,23 @@ begin
   if ShortCutText = 'Unknown' then ShortCutText := '';
   if ShortCutText <> '' then
   begin
-    ShortCutX := ARect.Right - Canvas.TextWidth(ShortCutText) - 15;
+    // 调整 ShortCut 位置，向左移动一点，为箭头腾出更多空间
+    ShortCutX := ARect.Right - Canvas.TextWidth(ShortCutText) - 25;
     Canvas.TextRect(ARect, ShortCutX, ARect.Top + (ARect.Height - Canvas.TextHeight('Wg')) div 2, ShortCutText);
   end;
 
   if HasSubMenu then
   begin
+    Canvas.Font.Size:=10;
     Canvas.Pen.Color := Canvas.Font.Color;
-    IconX := ARect.Right - 10;
-    IconY := ARect.Top + ARect.Height div 2;
-    Canvas.Line(IconX, IconY - 3, IconX + 4, IconY);
-    Canvas.Line(IconX, IconY + 3, IconX + 4, IconY);
+    // 调整箭头位置：向左移动 (Right - 15)，确保完整显示且不贴边
+    IconX := ARect.Right - 15;
+    IconY := ARect.Top + (ARect.Height - Canvas.TextHeight('Wg')) div 2;
+    //IconY := ARect.Top + ARect.Height div 2;
+    // 绘制箭头 (三角形)
+    Canvas.TextOut(IconX,IconY, '>');
+    //Canvas.Line(IconX, IconY - 3, IconX + 4, IconY);
+    //Canvas.Line(IconX, IconY + 3, IconX + 4, IconY);
   end;
 end;
 
@@ -685,8 +692,6 @@ begin
       begin
         if Item.Count = 0 then
         begin
-          // 修改顺序：先关闭菜单，再执行点击事件
-          // 这样即使 ShowMessage 阻塞，菜单也已经消失了
           CloseAllPopups;
           Item.Click;
         end
@@ -854,7 +859,6 @@ begin
 
   if Item <> nil then
   begin
-    // 如果快捷键触发时菜单是打开的，先关闭菜单
     if (FPopupForm <> nil) and (FPopupForm.Visible) then
       HidePopup;
 
