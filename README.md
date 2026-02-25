@@ -7,7 +7,7 @@ lazarus菜单栏在 Windows/macOS/GTK/Qt 下使用操作系统原生菜单，在
 <img width="457" height="180" alt="image" src="https://github.com/user-attachments/assets/3916d59c-84f1-4df8-8524-e6ad1ebb483a" />  
 <img width="371" height="242" alt="image" src="https://github.com/user-attachments/assets/6e7ab77c-2b39-474d-ac5b-0d2c63220ac9" />  
 <img width="776" height="434" alt="image" src="https://github.com/user-attachments/assets/4e7e3852-f91f-4cbc-a674-6d5fd6d56fc2" />  
-  
+# demo：    
 ```
 unit menu_unit;
 
