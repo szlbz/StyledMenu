@@ -160,7 +160,6 @@ end;
 
 destructor TStyledMenuPopup.Destroy;
 begin
-  // 析构时确保清理子菜单引用
   if FChildPopup <> nil then
   begin
     FChildPopup.Free;
@@ -521,7 +520,6 @@ procedure TStyledMenuPopup.HideSubMenu;
 begin
   if FChildPopup <> nil then
   begin
-    // 使用 Release 而不是 Free，防止在事件处理过程中销毁对象导致崩溃
     FChildPopup.Hide;
     FChildPopup.Release;
     FChildPopup := nil;
@@ -529,17 +527,14 @@ begin
   end;
 end;
 
-// 修改后的关闭逻辑：向上递归关闭
 procedure TStyledMenuPopup.CloseAllPopups;
 begin
-  // 1. 隐藏自己
-  Hide; // 这会触发 DoHide -> HideSubMenu (关闭下级)
+  Hide;
 
-  // 2. 通知父级也关闭
   if FParentPopup <> nil then
     FParentPopup.CloseAllPopups
   else if Assigned(FOnClosePopup) then
-    FOnClosePopup(Self); // 如果是顶层，通知 MenuBar 清理
+    FOnClosePopup(Self);
 end;
 
 procedure TStyledMenuPopup.MouseMove(Shift: TShiftState; X, Y: Integer);
@@ -690,9 +685,10 @@ begin
       begin
         if Item.Count = 0 then
         begin
-          Item.Click;
-          // 关键修改：点击后关闭所有菜单链
+          // 修改顺序：先关闭菜单，再执行点击事件
+          // 这样即使 ShowMessage 阻塞，菜单也已经消失了
           CloseAllPopups;
+          Item.Click;
         end
         else
         begin
@@ -858,6 +854,10 @@ begin
 
   if Item <> nil then
   begin
+    // 如果快捷键触发时菜单是打开的，先关闭菜单
+    if (FPopupForm <> nil) and (FPopupForm.Visible) then
+      HidePopup;
+
     Item.Click;
     Handled := True;
     Msg.Result := 1;
@@ -1072,7 +1072,6 @@ begin
   ReleaseCapture;
   if FPopupForm <> nil then
   begin
-    // 使用 Release 安全释放
     FPopupForm.Release;
     FPopupForm := nil;
   end;
