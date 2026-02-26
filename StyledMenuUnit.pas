@@ -368,6 +368,19 @@ var
   IconSize: Integer;
 begin
   Item := FMenuItems[Index];
+
+  // 【修改1】：优先处理分隔线，确保分隔线绘制普通背景，不绘制高亮
+  if Item.Caption = '-' then
+  begin
+    Canvas.Brush.Color := GetPopupColor;
+    Canvas.FillRect(ARect); // 填充普通背景色
+    Canvas.Pen.Color := GetPopupBorderColor; // 使用边框色作为线条颜色更协调，或者用 clGray
+    // 绘制居中的分隔线
+    Canvas.Line(ARect.Left + 2, ARect.Top + ARect.Height div 2, ARect.Right - 2, ARect.Top + ARect.Height div 2);
+    Exit; // 直接退出，不执行后续的高亮逻辑
+  end;
+
+  // 下面是普通菜单项的逻辑
   HasSubMenu := (Item.Count > 0);
 
   if Item.Enabled then
@@ -393,12 +406,7 @@ begin
 
   Canvas.FillRect(ARect);
 
-  if Item.Caption = '-' then
-  begin
-    Canvas.Pen.Color := clGray;
-    Canvas.Line(ARect.Left + 2, ARect.Top + 2, ARect.Right - 2, ARect.Top + 2);
-    Exit;
-  end;
+  // 此处原有的分隔线判断代码已移至函数开头，故删除
 
   IconWidth := 0;
   IconHeight := 0;
@@ -415,7 +423,7 @@ begin
       IconSize:=Min(FImages.Width,FImages.Height);
     end
     else
-      IconSize:=my_IconSize;
+      IconSize:=my_IconSize; // 注意：此处逻辑保持原样，但建议通常应使用设定的 IconSize
     IconWidth := Min(FImages.Width, IconSize);
     IconHeight := Min(FImages.Height, IconSize);
     IconX := ARect.Left + 4;
@@ -472,14 +480,11 @@ begin
   begin
     Canvas.Font.Size:=10;
     Canvas.Pen.Color := Canvas.Font.Color;
-    // 调整箭头位置：向左移动 (Right - 15)，确保完整显示且不贴边
+    // 调整箭头位置：向左移动，确保完整显示且不贴边
     IconX := ARect.Right - 15;
     IconY := ARect.Top + (ARect.Height - Canvas.TextHeight('Wg')) div 2;
-    //IconY := ARect.Top + ARect.Height div 2;
     // 绘制箭头 (三角形)
-    Canvas.TextOut(IconX,IconY, '►');//'>');
-    //Canvas.Line(IconX, IconY - 3, IconX + 4, IconY);
-    //Canvas.Line(IconX, IconY + 3, IconX + 4, IconY);
+    Canvas.TextOut(IconX,IconY, '►');
   end;
 end;
 
@@ -645,7 +650,13 @@ begin
 
     if PtInRect(R, Point(X, Y)) then
     begin
-      NewIndex := i;
+      // 【修改2】：如果鼠标悬停在分隔线(Caption='-')上，则不更新悬停索引
+      // 这样 IsHover 参数在 PaintItem 中将为 False
+      if FMenuItems[i].Caption <> '-' then
+        NewIndex := i
+      else
+        NewIndex := FHoverIndex; // 保持当前状态，或者设为-1取消所有高亮
+
       Break;
     end;
     CurY := R.Bottom;
