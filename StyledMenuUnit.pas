@@ -8,6 +8,9 @@ uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Menus, LCLType, Dialogs,
   LCLIntf, LMessages, ExtCtrls, StdCtrls, GraphType, imglist, lclproc, ComCtrls;
 
+const
+  My_IconSize = 24;
+
 type
   { 前向声明 }
   TStyledMenuBar = class;
@@ -117,7 +120,7 @@ type
     property Font;
     property AutoSize;
 
-    property IconSize: Integer read FIconSize write FIconSize default 24;
+    property IconSize: Integer read FIconSize write FIconSize default my_IconSize;
     property BarColor: TColor read FBarColor write FBarColor default clBtnFace;
     property ItemHoverColor: TColor read FItemHoverColor write FItemHoverColor default clHighlight;
     property TextColor: TColor read FTextColor write FTextColor default clBtnText;
@@ -138,7 +141,7 @@ uses
 
 procedure Register;
 begin
-  RegisterComponents('Additional', [TStyledMenuBar]);
+  RegisterComponents('Standard', [TStyledMenuBar]);
 end;
 
 { TStyledMenuPopup }
@@ -259,7 +262,7 @@ begin
   if FMenuBar <> nil then
     IconSize := FMenuBar.IconSize
   else
-    IconSize := 24;
+    IconSize := my_IconSize;
 
   if IconSize=0 then
   begin
@@ -278,7 +281,7 @@ begin
     IconSize:=Min(FImages.Width,FImages.Height);
 
   if IconSize=0 then
-    IconSize:=24;
+    IconSize:=my_IconSize;
   if (FImages <> nil) and (FImages.Count > 0) then
   begin
     MaxImgWidth := Min(FImages.Width, IconSize);
@@ -403,7 +406,7 @@ begin
   if FMenuBar <> nil then
     IconSize := FMenuBar.IconSize
   else
-    IconSize := 24;
+    IconSize := my_IconSize;
 
   if (FImages <> nil) and (IconIdx >= 0) and (IconIdx < FImages.Count) then
   begin
@@ -412,7 +415,7 @@ begin
       IconSize:=Min(FImages.Width,FImages.Height);
     end
     else
-      IconSize:=24;
+      IconSize:=my_IconSize;
     IconWidth := Min(FImages.Width, IconSize);
     IconHeight := Min(FImages.Height, IconSize);
     IconX := ARect.Left + 4;
@@ -441,7 +444,7 @@ begin
     if IconSize=0 then
     begin
       IconSize:=Min(Item.Bitmap.Width,Item.Bitmap.Height);
-      if IconSize=0 then IconSize:=24;
+      if IconSize=0 then IconSize:=my_IconSize;
     end;
     IconWidth := Min(Item.Bitmap.Width, IconSize);
     IconHeight := Min(Item.Bitmap.Height, IconSize);
@@ -474,7 +477,7 @@ begin
     IconY := ARect.Top + (ARect.Height - Canvas.TextHeight('Wg')) div 2;
     //IconY := ARect.Top + ARect.Height div 2;
     // 绘制箭头 (三角形)
-    Canvas.TextOut(IconX,IconY, '>');
+    Canvas.TextOut(IconX,IconY, '►');//'>');
     //Canvas.Line(IconX, IconY - 3, IconX + 4, IconY);
     //Canvas.Line(IconX, IconY + 3, IconX + 4, IconY);
   end;
@@ -772,7 +775,7 @@ begin
   FTextColor := clBtnText;
   FTextHoverColor := clHighlightText;
   FPopupColor := clWhite;
-  FIconSize:=24;
+  FIconSize:=my_IconSize;
   FPopupBorderColor := clGray;
   FDisabledTextColor := clGray;
 end;
