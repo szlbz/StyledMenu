@@ -3,7 +3,7 @@ lazarus菜单栏在 Windows/macOS/GTK/Qt 下使用操作系统原生菜单，在
 如采用自绘菜单栏，但自绘只在Windows下有效，为了实现跨平台（Windows/Linux）且不依赖系统原生渲染，需要完全抛弃系统菜单栏的渲染机制，改用自定义控件（TCustomControl）来模拟菜单栏，并用一个无边框窗体（TForm）来模拟弹出菜单。  
 并充分利用原有的MainItem进行菜单设置，用一个单元文件 StyledMenuUnit.pas，你可以将其放到窗体上，绑定原有的 TMainMenu，即可实现自定义背景色和项目样式。  
 只需要有MainMenu的单元添加红代码部分就可以实现自定义背景、字体，高亮颜色及字体大小及菜单栏位置(Align支持alTop / alBottom)等。  
-下图是银河麒麟使用原生菜单栏：  
+下图是银河麒麟使用系统原生菜单：  
 <img width="552" height="243" alt="image" src="https://github.com/user-attachments/assets/6a80ee39-d610-4524-84f4-6001694ea6ba" />  
 下图是银河麒麟使用菜单扩展功能后：  
 <img width="556" height="214" alt="image" src="https://github.com/user-attachments/assets/b7bab6bb-3e94-4f0f-ae5d-8e4e0e9cdd89" />  
