@@ -239,7 +239,7 @@ var
   Item: TMenuItem;
   ShortCutText: String;
   MaxImgWidth, MaxImgHeight: Integer;
-  IconSize:Integer;
+  IconSize,MaxIconSize:Integer;
 begin
   FMaxTextWidth := 0;
   FMaxShortcutWidth := 0;
@@ -255,14 +255,32 @@ begin
 
   MaxImgWidth := 0;
   MaxImgHeight := 0;
+  MaxIconSize := 0;
   if FMenuBar <> nil then
     IconSize := FMenuBar.IconSize
   else
     IconSize := 24;
 
+  if IconSize=0 then
+  begin
+    for i := 0 to FMenuItems.Count - 1 do
+    begin
+      Item := FMenuItems[i];
+      if (Item.Bitmap <> nil) and (not Item.Bitmap.Empty) then
+      begin
+          MaxIconSize:=Min(Item.Bitmap.Width,Item.Bitmap.Height);
+          IconSize:=Max(MaxIconSize,IconSize);
+      end;
+    end;
+  end;
+
+  if (IconSize=0) and (FImages <> nil) then
+    IconSize:=Min(FImages.Width,FImages.Height);
+
+  if IconSize=0 then
+    IconSize:=24;
   if (FImages <> nil) and (FImages.Count > 0) then
   begin
-
     MaxImgWidth := Min(FImages.Width, IconSize);
     MaxImgHeight := Min(FImages.Height, IconSize);
   end;
@@ -389,7 +407,12 @@ begin
 
   if (FImages <> nil) and (IconIdx >= 0) and (IconIdx < FImages.Count) then
   begin
-
+    if IconSize=0 then
+    begin
+      IconSize:=Min(FImages.Width,FImages.Height);
+    end
+    else
+      IconSize:=24;
     IconWidth := Min(FImages.Width, IconSize);
     IconHeight := Min(FImages.Height, IconSize);
     IconX := ARect.Left + 4;
@@ -415,6 +438,11 @@ begin
   end
   else if (Item.Bitmap <> nil) and (not Item.Bitmap.Empty) then
   begin
+    if IconSize=0 then
+    begin
+      IconSize:=Min(Item.Bitmap.Width,Item.Bitmap.Height);
+      if IconSize=0 then IconSize:=24;
+    end;
     IconWidth := Min(Item.Bitmap.Width, IconSize);
     IconHeight := Min(Item.Bitmap.Height, IconSize);
     IconX := ARect.Left + 4;
