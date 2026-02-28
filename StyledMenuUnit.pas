@@ -423,7 +423,7 @@ begin
       IconSize:=Min(FImages.Width,FImages.Height);
     end
     else
-      IconSize:=my_IconSize; // 注意：此处逻辑保持原样，但建议通常应使用设定的 IconSize
+      IconSize:=my_IconSize;
     IconWidth := Min(FImages.Width, IconSize);
     IconHeight := Min(FImages.Height, IconSize);
     IconX := ARect.Left + 4;
