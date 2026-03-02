@@ -1,4 +1,5 @@
 # lazarus 扩展MainMenu功能
+* [秋风原创控件] QQ：315795176 
 lazarus菜单栏在 Windows/macOS/GTK/Qt 下使用操作系统原生菜单，在linux，特别是国产的银河麒麟系统，菜单的背景颜色默认是灰黑色的，和应用程序界面颜色明显不搭。  
 如采用自绘菜单栏，但自绘只在Windows下有效，为了实现跨平台（Windows/Linux）且不依赖系统原生渲染，需要完全抛弃系统菜单栏的渲染机制，改用自定义控件（TCustomControl）来模拟菜单栏，并用一个无边框窗体（TForm）来模拟弹出菜单。  
 并充分利用原有的MainItem进行菜单设置，用一个单元文件 StyledMenuUnit.pas，你可以将其放到窗体上，绑定原有的 TMainMenu，即可实现自定义背景色和项目样式。  
